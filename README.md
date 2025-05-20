@@ -2,12 +2,7 @@
 
 ## 1. Setup & Dependencies
 
-1. **Clone the repo** (or copy files into a directory):
-
-   ```bash
-   git clone <your-repo-url>
-   cd <your-repo-directory>
-   ```
+1. **Clone the repo** (or copy files into a directory)
 
 2. **Run the combined agent using python on an input JSON file**:
 
