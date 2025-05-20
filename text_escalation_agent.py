@@ -2,11 +2,11 @@ import json
 import re
 from typing import Any, Dict, List, Optional
 
-# Patterns indicating ambiguity or potential issues
+# Patterns indicating ambiguity or potential issues (allowing suffixes)
 AMBIGUITY_PATTERNS = [
-    r"\bvarious\b",
+    r"\bvarious\w*\b",
     r"\bTBD\b",
-    r"\bunknown\b",
+    r"\bunknown\w*\b",
     r"\bunspecified\b",
     r"\bmiscellaneous\b",
 ]
@@ -25,12 +25,10 @@ def analyze_text_for_ambiguity(text: Optional[str]) -> Optional[str]:
     if not text:
         return None
 
-    lower_text = text.lower()
     for pattern in AMBIGUITY_PATTERNS:
-        if re.search(pattern, lower_text):
-            # Extract the raw matched term for clarity
-            match = re.search(pattern, lower_text)
-            term = match.group(0) if match else pattern.strip('\\b')
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            term = match.group(0)
             return f"Ambiguous term '{term}' found"
     return None
 
@@ -44,7 +42,8 @@ def review_with_text_analysis(q: Dict[str, Any]) -> Dict[str, Any]:
 
     # Scan each free-text field
     for field in TEXT_FIELDS:
-        reason = analyze_text_for_ambiguity(q.get(field))
+        text_value = q.get(field)
+        reason = analyze_text_for_ambiguity(text_value)
         if reason:
             return {
                 "questionnaire_id": questionnaire_id,
@@ -62,7 +61,7 @@ def review_with_text_analysis(q: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def process_file(input_path: str) -> None: # Removed output_path
+def process_file(input_path: str) -> None:
     """
     Load questionnaires, apply text-based escalation logic, and print results to terminal.
     """
@@ -91,8 +90,6 @@ if __name__ == "__main__":
         description="Text-ambiguity escalation for PE subscription questionnaires."
     )
     parser.add_argument("--input", required=True, help="Path to input JSON file")
-    # Removed the --output argument as it's no longer needed
     args = parser.parse_args()
 
-    process_file(args.input) # Removed args.output
-    # Removed the print statement about writing to output file
+    process_file(args.input)

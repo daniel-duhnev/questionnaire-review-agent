@@ -62,10 +62,9 @@ def review_questionnaire(q: Dict[str, Any]) -> Dict[str, Any]:
         "escalation_reason": None,
     }
 
-
-def process_file(input_path: str, output_path: str) -> None:
+def process_file(input_path: str) -> None:
     """
-    Load a JSON file of questionnaires, review each, and write results to output JSON.
+    Load a JSON file of questionnaires, review each, and print results to the terminal.
     Handles both a single object and a list of objects.
     """
     with open(input_path, 'r', encoding='utf-8') as f:
@@ -84,17 +83,14 @@ def process_file(input_path: str, output_path: str) -> None:
         result = review_questionnaire(q)
         results.append(result)
 
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2)
-
+    # Print results to terminal instead of saving to a file
+    print(json.dumps(results, indent=2))
 
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Review PE subscription questionnaires.")
     parser.add_argument("--input", required=True, help="Path to input JSON file")
-    parser.add_argument("--output", required=True, help="Path to output JSON file")
     args = parser.parse_args()
 
-    process_file(args.input, args.output)
-    print(f"Processed {args.input} and wrote results to {args.output}")
+    process_file(args.input)
