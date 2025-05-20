@@ -1,0 +1,22 @@
+# Python compiled files
+*.pyc
+__pycache__/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Sensitive files
+.env
