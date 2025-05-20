@@ -40,7 +40,7 @@
    ```json
    {
      "questionnaire_id": "...",
-     "decision": "Approve" | "Return" | "Escalate",
+     "decision": "Approve"/"Return"/"Escalate",
      "missing_fields": [...],         // only for Return
      "escalation_reason": "..."       // only for Escalate
    }
